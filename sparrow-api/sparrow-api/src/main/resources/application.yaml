@@ -1,0 +1,5 @@
+vertx:
+  deploymentInstances: 2
+server:
+  port: 6101
+test: 123
