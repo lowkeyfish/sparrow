@@ -1,0 +1,30 @@
+{
+  "timestamp": {
+    "$resolver": "timestamp",
+    "pattern": "yyyy-MM-dd'T'HH:mm:ss.SSSX"
+  },
+  "requestId": "${ctx:requestId:-}",
+  "level": {
+    "$resolver": "level",
+    "field": "name"
+  },
+  "logger": {
+    "$resolver": "logger",
+    "field": "name"
+  },
+  "data": {
+    "$resolver": "message",
+    "fallbackKey": "message"
+  },
+  "exception": {
+    "$resolver": "exception",
+    "field": "message"
+  },
+  "stacktrace": {
+    "$resolver": "exception",
+    "field": "stackTrace",
+    "stackTrace": {
+      "stringified": true
+    }
+  }
+}
