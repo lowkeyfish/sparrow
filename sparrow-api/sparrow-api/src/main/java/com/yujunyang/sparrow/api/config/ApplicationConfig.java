@@ -6,14 +6,14 @@ import com.yujunyang.sparrow.common.vertx.config.DefaultApplicationConfig;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ApplicationConfig extends DefaultApplicationConfig {
-    @JsonProperty("test")
-    private int test;
+    @JsonProperty("otel")
+    private OtelConfig otel;
 
-    public int getTest() {
-        return test;
+    public OtelConfig getOtel() {
+        return otel;
     }
 
-    public void setTest(int test) {
-        this.test = test;
+    public void setOtel(OtelConfig otel) {
+        this.otel = otel;
     }
 }

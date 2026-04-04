@@ -21,7 +21,7 @@ public class MainVerticle extends VerticleBase {
         new TestRouter().appendTo(router);
         int port = ApplicationConfigManager.get().getServer().getPort();
         return vertx.createHttpServer().requestHandler(router).listen(port).onSuccess(http -> {
-            LOGGER.info(DataMessage.of("HttpServer启动成功", Map.of("port", port)));
+            LOGGER.info(DataMessage.of("Sparrow Http Server启动成功", Map.of("port", port)));
         });
     }
 }
