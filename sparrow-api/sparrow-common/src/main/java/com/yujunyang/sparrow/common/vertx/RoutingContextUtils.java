@@ -8,16 +8,16 @@ import io.vertx.sqlclient.Pool;
 
 public final class RoutingContextUtils {
 
-    private static final String KEY_REQUEST_ID = "REQUEST_ID";
+    private static final String KEY_TRACE_ID = "TRACE_ID";
     private static final String KEY_MYSQL_POOL = "MYSQL_POOL";
     private static final String KEY_JWT_AUTH = "JWT_AUTH";
 
-    public static void putRequestId(RoutingContext routingContext, String requestId) {
-        routingContext.put(KEY_REQUEST_ID, requestId);
+    public static void putTraceId(RoutingContext routingContext, String traceId) {
+        routingContext.put(KEY_TRACE_ID, traceId);
     }
 
-    public static String getRequestId(RoutingContext routingContext) {
-        return routingContext.get(KEY_REQUEST_ID);
+    public static String getTraceId(RoutingContext routingContext) {
+        return routingContext.get(KEY_TRACE_ID);
     }
 
     public static void putMySQLPool(RoutingContext routingContext, Pool mySQLPool) {
@@ -38,11 +38,11 @@ public final class RoutingContextUtils {
 
     public static <T> void response(RoutingContext routingContext, T result) {
         routingContext.json(
-                new JsonObject().put("code", 0).put("result", result).put("requestId", getRequestId(routingContext)));
+                new JsonObject().put("code", 0).put("result", result).put("traceId", getTraceId(routingContext)));
     }
 
     public static void response(RoutingContext routingContext) {
-        routingContext.json(new JsonObject().put("code", 0).put("requestId", getRequestId(routingContext)));
+        routingContext.json(new JsonObject().put("code", 0).put("traceId", getTraceId(routingContext)));
     }
 
     public static JsonObject requestBody(RoutingContext routingContext) {

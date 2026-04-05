@@ -11,5 +11,7 @@ public class OtelHttpServerRouter {
         router.get("/").handler(routingContext -> {
             RoutingContextUtils.response(routingContext, "welcome to sparrow otel http");
         });
+
+        router.get("/health").handler(routingContext -> RoutingContextUtils.response(routingContext, "ok"));
     }
 }
