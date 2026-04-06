@@ -5,8 +5,20 @@ import com.yujunyang.sparrow.api.verticle.MainVerticle;
 import com.yujunyang.sparrow.api.verticle.OtelHttpServerVerticle;
 import com.yujunyang.sparrow.common.launch.ApplicationLauncher;
 import com.yujunyang.sparrow.common.vertx.config.ApplicationConfigManager;
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.common.Attributes;
+import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
+import io.opentelemetry.context.propagation.ContextPropagators;
+import io.opentelemetry.exporter.logging.otlp.OtlpJsonLoggingSpanExporter;
+import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.resources.Resource;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
+import io.opentelemetry.semconv.ServiceAttributes;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
+import io.vertx.tracing.opentelemetry.OpenTelemetryTracingFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,7 +26,27 @@ public class Application {
     private static final Logger LOGGER = LogManager.getLogger(Application.class);
 
     public static void main(String... args) {
-        Vertx vertx = Vertx.vertx();
+
+        OtlpHttpSpanExporter spanExporter = OtlpHttpSpanExporter.builder()
+                .setEndpoint("http://localhost:4318/v1/traces")
+                .build();
+
+        //        SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
+        //                .addSpanProcessor(BatchSpanProcessor.builder(spanExporter).build())
+        //                .setResource(Resource.create(Attributes.of(ServiceAttributes.SERVICE_NAME, "sparrow")))
+        //                .build();
+        SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
+                .addSpanProcessor(SimpleSpanProcessor.create(OtlpJsonLoggingSpanExporter.create()))
+                .setResource(Resource.create(Attributes.of(ServiceAttributes.SERVICE_NAME, "sparrow")))
+                .build();
+
+        OpenTelemetry openTelemetry = OpenTelemetrySdk.builder()
+                .setTracerProvider(sdkTracerProvider)
+                .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
+                .buildAndRegisterGlobal();
+        Vertx vertx = Vertx.builder()
+                .withTracer(new OpenTelemetryTracingFactory(openTelemetry))
+                .build();
         try {
             ApplicationLauncher.start(vertx, ApplicationConfig.class, v -> {
                         ApplicationConfig applicationConfig = ApplicationConfigManager.get();

@@ -1,6 +1,7 @@
 package com.yujunyang.sparrow.common.vertx;
 
 import com.yujunyang.sparrow.common.exceptions.BusinessRuleException;
+import io.opentelemetry.api.trace.Span;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.web.RoutingContext;
@@ -17,7 +18,19 @@ public final class RoutingContextUtils {
     }
 
     public static String getTraceId(RoutingContext routingContext) {
-        return routingContext.get(KEY_TRACE_ID);
+        Span currentSpan = Span.current();
+        if (currentSpan == null || !currentSpan.getSpanContext().isValid()) {
+            return "";
+        }
+        return currentSpan.getSpanContext().getTraceId();
+    }
+
+    private static String getTraceId() {
+        Span currentSpan = Span.current();
+        if (currentSpan == null || !currentSpan.getSpanContext().isValid()) {
+            return "";
+        }
+        return currentSpan.getSpanContext().getTraceId();
     }
 
     public static void putMySQLPool(RoutingContext routingContext, Pool mySQLPool) {
