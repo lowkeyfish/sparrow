@@ -1,7 +1,6 @@
 package com.yujunyang.sparrow.common.vertx.handler;
 
 import com.yujunyang.sparrow.common.utils.OtelUtils;
-import com.yujunyang.sparrow.common.vertx.RoutingContextUtils;
 import io.reactiverse.contextual.logging.ContextualData;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;

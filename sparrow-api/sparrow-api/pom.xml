@@ -44,10 +44,10 @@
       <groupId>io.reactiverse</groupId>
       <artifactId>reactiverse-contextual-logging-log4j2</artifactId>
     </dependency>
-    <dependency>
-      <groupId>io.opentelemetry.instrumentation</groupId>
-      <artifactId>opentelemetry-log4j-context-data-2.17-autoconfigure</artifactId>
-    </dependency>
+    <!--    <dependency>-->
+    <!--      <groupId>io.opentelemetry.instrumentation</groupId>-->
+    <!--      <artifactId>opentelemetry-log4j-context-data-2.17-autoconfigure</artifactId>-->
+    <!--    </dependency>-->
 
     <dependency>
       <groupId>io.vertx</groupId>
@@ -73,7 +73,6 @@
       <groupId>io.vertx</groupId>
       <artifactId>vertx-opentelemetry</artifactId>
     </dependency>
-
 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>

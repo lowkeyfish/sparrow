@@ -29,8 +29,7 @@ public final class RoutingContextUtils {
 
     public static <T> void response(RoutingContext routingContext, T result) {
         routingContext.json(
-                new JsonObject().put("code", 0).put("result", result).put("traceId",
-                                                                          OtelUtils.getTraceId()));
+                new JsonObject().put("code", 0).put("result", result).put("traceId", OtelUtils.getTraceId()));
     }
 
     public static void response(RoutingContext routingContext) {
