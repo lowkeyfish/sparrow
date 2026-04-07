@@ -1,37 +1,15 @@
 package com.yujunyang.sparrow.common.vertx;
 
 import com.yujunyang.sparrow.common.exceptions.BusinessRuleException;
-import io.opentelemetry.api.trace.Span;
+import com.yujunyang.sparrow.common.utils.OtelUtils;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.sqlclient.Pool;
 
 public final class RoutingContextUtils {
-
-    private static final String KEY_TRACE_ID = "TRACE_ID";
     private static final String KEY_MYSQL_POOL = "MYSQL_POOL";
     private static final String KEY_JWT_AUTH = "JWT_AUTH";
-
-    public static void putTraceId(RoutingContext routingContext, String traceId) {
-        routingContext.put(KEY_TRACE_ID, traceId);
-    }
-
-    public static String getTraceId(RoutingContext routingContext) {
-        Span currentSpan = Span.current();
-        if (currentSpan == null || !currentSpan.getSpanContext().isValid()) {
-            return "";
-        }
-        return currentSpan.getSpanContext().getTraceId();
-    }
-
-    private static String getTraceId() {
-        Span currentSpan = Span.current();
-        if (currentSpan == null || !currentSpan.getSpanContext().isValid()) {
-            return "";
-        }
-        return currentSpan.getSpanContext().getTraceId();
-    }
 
     public static void putMySQLPool(RoutingContext routingContext, Pool mySQLPool) {
         routingContext.put(KEY_MYSQL_POOL, mySQLPool);
@@ -51,11 +29,12 @@ public final class RoutingContextUtils {
 
     public static <T> void response(RoutingContext routingContext, T result) {
         routingContext.json(
-                new JsonObject().put("code", 0).put("result", result).put("traceId", getTraceId(routingContext)));
+                new JsonObject().put("code", 0).put("result", result).put("traceId",
+                                                                          OtelUtils.getTraceId()));
     }
 
     public static void response(RoutingContext routingContext) {
-        routingContext.json(new JsonObject().put("code", 0).put("traceId", getTraceId(routingContext)));
+        routingContext.json(new JsonObject().put("code", 0).put("traceId", OtelUtils.getTraceId()));
     }
 
     public static JsonObject requestBody(RoutingContext routingContext) {

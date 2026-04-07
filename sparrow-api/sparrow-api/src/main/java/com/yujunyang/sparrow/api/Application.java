@@ -19,13 +19,19 @@ import io.opentelemetry.semconv.ServiceAttributes;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.tracing.opentelemetry.OpenTelemetryTracingFactory;
+import java.util.ServiceLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.util.ContextDataProvider;
 
 public class Application {
-    private static final Logger LOGGER = LogManager.getLogger(Application.class);
+    // private static final Logger LOGGER = LogManager.getLogger(Application.class);
 
     public static void main(String... args) {
+        ServiceLoader<ContextDataProvider> loader = ServiceLoader.load(ContextDataProvider.class);
+        for (ContextDataProvider provider : loader) {
+            System.out.println("Found: " + provider.getClass().getName());
+        }
 
         OtlpHttpSpanExporter spanExporter = OtlpHttpSpanExporter.builder()
                 .setEndpoint("http://localhost:4318/v1/traces")

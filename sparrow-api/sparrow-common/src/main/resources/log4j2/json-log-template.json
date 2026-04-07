@@ -3,7 +3,9 @@
     "$resolver": "timestamp",
     "pattern": "yyyy-MM-dd'T'HH:mm:ss.SSSX"
   },
-  "traceId": "${ctx:traceId:-}",
+  "traceId": "${ctx:trace_id:-}",
+  "spanId": "${ctx:span_id:-}",
+  "traceId2": "${ctx:traceId2:-}",
   "level": {
     "$resolver": "level",
     "field": "name"
